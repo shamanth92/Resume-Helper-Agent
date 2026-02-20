@@ -1,0 +1,310 @@
+# Resume Helper Backend - Coding Tasks by Phase
+
+---
+
+## **Phase 1: Project Setup & LangGraph Foundation** (Day 1-2)
+
+### Tasks:
+
+1. **Initialize project**
+    - Create new TypeScript project
+    - Install dependencies: `@langchain/langgraph`, `@langchain/openai`, `zod`
+    - Setup tsconfig, package.json scripts
+2. **Define State Schema**
+    - Create `AgentState` interface with all fields
+    - Use Zod for validation
+3. **Create basic StateGraph structure**
+    - Initialize StateGraph
+    - Add placeholder nodes (just console.log for now)
+    - Set entry point and edges
+    - Compile graph
+4. **Test basic flow**
+    - CLI script that invokes graph with dummy data
+    - Verify state passes through nodes
+    - Check console logs
+
+**Deliverable:** Working LangGraph skeleton that runs end-to-end with dummy data
+
+---
+
+## **Phase 2: Resume Parsing** (Day 3-4)
+
+### Tasks:
+
+1. **Create `parseResumeNode`**
+    
+    - Input: raw resume text (pasted by user)
+    - Parse into structured format using LLM
+    - Prompt: "Extract structured data from this resume..."
+    - Output: JSON with sections (contact, experience, education, skills)
+2. **Create parsing prompt template**
+    
+    - Define exact JSON structure you want
+    - Include examples in prompt (few-shot)
+    - Use Zod schema for validation
+3. **Build CLI test script**
+    
+    - Read sample resume from text file
+    - Pass through parseResumeNode
+    - Print structured output
+    - Test with 2-3 different resume formats
+4. **Handle parsing errors**
+    
+    - If LLM returns invalid JSON, retry
+    - Add validation with Zod
+    - Fallback for missing fields
+
+**Deliverable:** Node that reliably converts text resume → structured JSON
+
+---
+
+## **Phase 3: Job Search Integration** (Day 5-7)
+
+### Tasks:
+
+1. **Setup Adzuna API**
+    
+    - Sign up, get API key
+    - Install axios or fetch
+    - Test API calls in isolation (not in graph yet)
+2. **Create `searchJobsNode`**
+    
+    - Input: job search query from state
+    - Call Adzuna API
+    - Parse response into structured Job[] array
+    - Store in state
+3. **Build job search tool/function**
+    
+    - Separate function: `searchJobs(query, filters)`
+    - Returns: Job[] with title, company, description, url, etc.
+    - Handle API errors, rate limits
+4. **Add filtering logic**
+    
+    - Filter by date (only recent jobs)
+    - Basic relevance filtering
+    - Limit to top 20 results
+5. **Test via CLI**
+    
+    - Pass dummy state with job query
+    - Print returned jobs
+    - Verify data structure
+
+**Deliverable:** Node that searches jobs and returns structured array
+
+---
+
+## **Phase 4: Job Ranking & Selection** (Day 8-9)
+
+### Tasks:
+
+1. **Create `rankJobsNode`**
+    
+    - Input: resumeData + jobs array
+    - Use embeddings to calculate similarity scores
+    - Rank jobs by match score
+    - Return top 3
+2. **Implement embedding-based matching**
+    
+    - Use OpenAI embeddings API
+    - Create embedding for resume
+    - Create embedding for each job description
+    - Calculate cosine similarity
+    - Sort by score
+3. **Create `displayJobsNode`**
+    
+    - Format top 3 jobs for display
+    - Print to console with numbering
+    - Include: title, company, match score, snippet
+4. **Add human-in-the-loop (interrupt)**
+    
+    - Use LangGraph `.interrupt()`
+    - Pause execution
+    - Wait for user input (job selection)
+    - Resume with selected job
+5. **Test CLI interaction**
+    
+    - Run graph
+    - See 3 jobs displayed
+    - Input selection (1, 2, or 3)
+    - Verify graph continues
+
+**Deliverable:** Agent pauses, shows jobs, accepts user selection, continues
+
+---
+
+## **Phase 5: Gap Analysis** (Day 10-11)
+
+### Tasks:
+
+1. **Create `analyzeGapNode`**
+    
+    - Input: resumeData + selectedJob
+    - Call LLM with comparison prompt
+    - Return gap analysis (skills to emphasize, missing keywords, etc.)
+2. **Design gap analysis prompt**
+    
+    - "Compare this resume to this job description"
+    - "Identify: matching skills, missing skills, keywords to add"
+    - Return structured JSON
+3. **Create GapAnalysis type**
+    
+    - matchingSkills: string[]
+    - missingSkills: string[]
+    - keywordsToAdd: string[]
+    - experienceAlignment: string
+4. **Test with sample data**
+    
+    - Use parsed resume + selected job
+    - Print gap analysis
+    - Verify it makes sense
+
+**Deliverable:** Node that analyzes resume vs job and returns actionable insights
+
+---
+
+## **Phase 6: Resume Tailoring** (Day 12-14)
+
+### Tasks:
+
+1. **Create `tailorResumeNode`**
+    
+    - Input: resumeData + selectedJob + gapAnalysis
+    - Call LLM to rewrite resume sections
+    - Return: TailoredResume object
+2. **Design tailoring prompt**
+    
+    - "Rewrite this resume to match this job"
+    - "Keep all information truthful"
+    - "Add keywords: [list]"
+    - "Emphasize: [skills]"
+    - Return structured sections
+3. **Create TailoredResume type**
+    
+    - summary: string
+    - experience: Experience[]
+    - skills: string[]
+    - education: Education[]
+4. **Implement section-by-section tailoring**
+    
+    - Rewrite summary/objective
+    - Rewrite each job bullet point
+    - Reorder/emphasize skills
+    - Keep education unchanged (usually)
+5. **Test tailoring quality**
+    
+    - Compare original vs tailored
+    - Check if keywords added naturally
+    - Verify no information fabricated
+
+**Deliverable:** Node that produces tailored resume content
+
+---
+
+## **Phase 7: Document Generation** (Day 15-16)
+
+### Tasks:
+
+1. **Install docx library**
+    
+    - `npm install docx`
+    - Test basic document creation
+2. **Create `generateDocumentNode`**
+    
+    - Input: TailoredResume
+    - Create DOCX using docx library
+    - Save to file system
+    - Return file path
+3. **Design resume template**
+    
+    - Professional layout
+    - Sections: Contact, Summary, Experience, Education, Skills
+    - ATS-friendly (no tables, simple formatting)
+    - Consistent fonts and spacing
+4. **Implement document builder**
+    
+    - Function: `buildResumeDocument(tailoredResume)`
+    - Add each section with proper formatting
+    - Handle bullet points, dates, formatting
+5. **Test document output**
+    
+    - Generate sample resume
+    - Open in Word/Google Docs
+    - Verify formatting looks professional
+    - Test with ATS checker (free online tools)
+
+**Deliverable:** Node that generates downloadable DOCX file
+
+---
+
+## **Phase 8: End-to-End Integration** (Day 17-18)
+
+### Tasks:
+
+1. **Wire all nodes together**
+    
+    - Verify edges between nodes
+    - Add conditional routing if needed
+    - Set proper entry/exit points
+2. **Build complete CLI interface**
+    
+    - User pastes resume
+    - Enters job search query
+    - Sees top 3 jobs
+    - Selects one
+    - Gets tailored resume generated
+3. **Add error handling**
+    
+    - Try-catch in each node
+    - Handle API failures gracefully
+    - Retry logic for transient errors
+    - User-friendly error messages
+4. **Add logging**
+    
+    - Log each node execution
+    - Log state transitions
+    - Log API calls (for debugging)
+    - Use different log levels (info, warn, error)
+5. **End-to-end testing**
+    
+    - Test with real resume text
+    - Test with different job types
+    - Test error scenarios (bad API key, no jobs found, etc.)
+    - Verify output file quality
+
+**Deliverable:** Fully working backend that runs from CLI
+
+---
+
+## **Phase 9: Polish & Edge Cases** (Day 19-21)
+
+### Tasks:
+
+1. **Handle edge cases**
+    
+    - No jobs found → helpful message + retry
+    - User cancels selection → exit gracefully
+    - Resume parsing fails → ask user to reformat
+    - API rate limit → wait and retry
+2. **Improve matching algorithm**
+    
+    - Test with diverse resume/job pairs
+    - Tune similarity threshold
+    - Add keyword boosting (exact matches score higher)
+3. **Add optional features**
+    
+    - Generate cover letter too
+    - Save state (resume + jobs) for later
+    - Allow multiple job selections
+4. **Code cleanup**
+    
+    - Refactor repeated code
+    - Add comments and documentation
+    - Type safety improvements
+    - Split large files into modules
+5. **Create comprehensive test script**
+    
+    - Multiple test resumes (junior, senior, different fields)
+    - Multiple job types
+    - Verify all paths work
+
+**Deliverable:** Production-ready backend, well-tested

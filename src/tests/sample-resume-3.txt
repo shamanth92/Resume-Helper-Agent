@@ -1,0 +1,51 @@
+
+Anshul Sareen
+San Diego, California | (979) 997-4381 | anshulsareen@tamu.edu
+EDUCATION
+Texas A&M University College Station, Texas
+Master of Science in Management Information System (GPA: 3.7/4.0) May 2021
+Vellore Institute of Technology Chennai, India
+Bachelor of Technology in Electronics and Communication Engineering (GPA: 3.94 /4.0) May 2016
+TECHNICAL SKILLS
+Languages: Python, Groovy, Golang, Java, SQL
+Databases: MySQL, MS Access, MS SQL Server, MongoDB, NoSQL, PostgreSQL
+Data Visualization Tools: Kibana, Grafana, SAP Analytics, Tableau, Microsoft Power BI, Google Data Studio, MS Excel
+Softwares: Kubernetes, Docker, AWS (ECS, EKS), GCP, Git, JIRA, Jenkins, Terraform, Ansible, Rancher, Prometheus
+EXPERIENCE
+Viasat Inc. Carlsbad, California
+Software Engineer, Full-time September 2021 – Present
+● Developed and tested custom Python software drivers for satellite systems while maintaining 90% test coverage
+● Developed Groovy scripts and implemented CI/CD pipelines in Jenkins to deploy satellite driver code to multiple 
+environments in Quali CloudShell
+● Configured Ansible playbooks to automate metric collection and service deployment on the servers
+● Managed Kubernetes clusters for satellite systems in Rancher and ArgoCD, and monitored metrics with Prometheus
+● Developed microservices in Golang and deployed them in Azure Kubernetes Services (AKS) through Rancher
+● Prepared dashboards to analyze and visualize satellite customer data using Databus, Druid, Kibana, and Grafana
+● Implemented Agile development with Git and Jira and automated processes with GitHub workflows
+ISN Software Corporation Dallas, Texas
+Software Developer July 2021 – September 2021
+● Built ad-hoc reports using T-SQL and completed data migration tasks for ISN customers
+● Troubleshooted possible bugs by examining web pages and database objects
+Viasat Inc. College Station, Texas
+Intern, Software Engineer May 2020 – Aug 2020
+● Deployed portal webpages for airplane customers using Kubernetes and AWS EKS to provide in-flight Wi-Fi
+● Migration from Docker compose to Kubernetes by developing web application using Helm charts
+● Maintained Infrastructure with Terraform by configuring AWS resources like VPC, AMI, EC2, EBS, ELB
+● Configured docker files and automated the configuration and deployment process through Jenkins & Artifactory
+GlobalLogic Gurgaon, India
+Software Engineer (Client - Google) November 2017 – May 2019
+● Served user queries on Google search engine by fetching data from a NoSQL graph DB using Graph query language
+● Developed ETL ingestion pipelines for 5 verticals with Python
+● Validated data before the vertical was launched and performed acceptance testing by collaborating with QA team
+● Prepared dashboards for client to summarize vertical data and visualized project status reports in Tableau
+ ACADEMIC PROJECTS
+Cryptocurrency Recommendation System
+● Handled large datasets of 70 cryptocurrencies and performed ETL using Python. Implemented and compared clustering 
+options using MariaDB Galera Cluster and MongoDB database. Visualized results in PowerBI.
+IMDB Movie Analysis and Recommendation
+● Analyzed movie ratings and user data present on Cassandra and Hive through Presto query engine. Provided movie 
+recommendations using MLLib in Apache Spark and managed the Hadoop ecosystem on Apache Ambari through HDP
+ LEADERSHIP
+Data Canary Project Lead at GlobalLogic Gurgaon, India 
+● Spearheaded a data quality and validation process; Lead a team of 5, gave training to them and delegated work
+● Interacted directly with the clients to develop process guidelines and related workflow
