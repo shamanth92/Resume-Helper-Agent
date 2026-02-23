@@ -2,9 +2,10 @@ import { StateGraph, START, END } from "@langchain/langgraph";
 
 import { AgentState } from "./state";
 
-import { analyzeGapNode, generateDocumentNode, rankJobsNode, selectJobNode, tailorResumeNode } from "./nodes/nodes";
+import { analyzeGapNode, generateDocumentNode, selectJobNode, tailorResumeNode } from "./nodes/nodes";
 import { searchJobsNode } from "./nodes/searchJobsNode";
 import { parseResumeNode } from "./nodes/parseResumeNode";
+import { rankJobsNode } from "./nodes/rankJobsNode";
 
 export const graph = new StateGraph(AgentState)
 
@@ -12,7 +13,7 @@ export const graph = new StateGraph(AgentState)
 
                             .addNode("searchJobs", searchJobsNode)
 
-                            .addNode("rankJobs", rankJobsNode)       
+                            .addNode("rankJobs", rankJobsNode)              
 
                             .addNode("selectJob", selectJobNode)      
 

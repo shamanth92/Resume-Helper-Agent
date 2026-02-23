@@ -1,10 +1,5 @@
 import { AgentState } from "../state";
 
-export const rankJobsNode = (state: typeof AgentState.State) => {
-    console.log("rankJobs", state.jobResults);
-    return {}
-};
-
 export const selectJobNode = (state: typeof AgentState.State) => {
     console.log("selectJob", state.jobResults);
     return {
