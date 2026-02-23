@@ -62,7 +62,7 @@
 
 ### Tasks:
 
-1. **Setup Adzuna API**
+1. **Setup JSearch API**
     
     - Sign up, get API key
     - Install axios or fetch

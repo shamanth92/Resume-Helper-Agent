@@ -20,7 +20,21 @@ export const ResumeSchema = z.object({
         year: z.string(),
     })),
     skills: z.array(z.string()),
-})
+});
+
+export const JobResultsSchema = z.object({
+        job_title: z.string(),
+        employer_name: z.string(),
+        employer_logo: z.string(),
+        employer_website: z.string(),
+        job_employment_type: z.string(),
+        job_description: z.string(),
+        job_apply_link: z.string(),
+        qualifications: z.array(z.string()).optional(),
+        responsibilities: z.array(z.string()).optional(),
+        job_location: z.string(),
+        job_salary_string: z.string(),
+    }).optional()
 
 export const AgentState = new StateSchema({
     resume: z.string(),
@@ -28,22 +42,8 @@ export const AgentState = new StateSchema({
     job: z.string(),
     jobType: z.string(),
     jobLocation: z.string(),
-    jobResults: z.array(z.object({
-        title: z.string(),
-        company: z.string(),
-        description: z.string(),
-        url: z.string(),
-        location: z.string().optional(),
-        salary: z.string().optional(),
-    })).optional(),
-    selectedJob: z.object({
-        title: z.string(),
-        company: z.string(),
-        description: z.string(),
-        url: z.string(),
-        location: z.string().optional(),
-        salary: z.string().optional(),
-    }).optional(),
+    jobResults: JobResultsSchema.array().optional(),
+    selectedJob: JobResultsSchema.optional(),
     tailoredResume: z.object({
         summary: z.string(),
         experience: z.array(z.object({

@@ -9,6 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:parse": "tsx src/tests/testParseResume.ts",
+    "test:api": "tsx src/tests/apiTest.ts",
+    "test:search": "tsx src/tests/testSearchJobs.ts",
     "build": "tsc",
     "dev": "tsx src/tests/test.ts"
   },
@@ -16,10 +18,13 @@
     "@langchain/core": "^1.1.26",
     "@langchain/langgraph": "^1.1.5",
     "@langchain/openai": "^1.2.8",
+    "axios": "^1.13.5",
+    "dotenv": "^17.3.1",
     "langchain": "^1.2.25",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/axios": "^0.9.36",
     "@types/node": "^25.3.0",
     "tsx": "^4.21.0"
   }
