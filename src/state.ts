@@ -36,6 +36,21 @@ export const JobResultsSchema = z.object({
         job_salary_string: z.string(),
     }).optional()
 
+export const RankedJobSchema = z.object({
+        job_title: z.string(),
+        employer_name: z.string(),
+        employer_logo: z.string(),
+        employer_website: z.string(),
+        job_employment_type: z.string(),
+        job_description: z.string(),
+        job_apply_link: z.string(),
+        qualifications: z.array(z.string()).optional(),
+        responsibilities: z.array(z.string()).optional(),
+        job_location: z.string(),
+        job_salary_string: z.string(),
+        similarity: z.number(),
+    }).optional()
+
 export const AgentState = new StateSchema({
     resume: z.string(),
     resumeData: ResumeSchema.optional(),
@@ -43,6 +58,7 @@ export const AgentState = new StateSchema({
     jobType: z.string(),
     jobLocation: z.string(),
     jobResults: JobResultsSchema.array().optional(),
+    rankedJobs: RankedJobSchema.array().optional(),
     selectedJob: JobResultsSchema.optional(),
     tailoredResume: z.object({
         summary: z.string(),

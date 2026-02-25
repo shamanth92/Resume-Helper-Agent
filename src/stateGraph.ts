@@ -1,11 +1,10 @@
-import { StateGraph, START, END } from "@langchain/langgraph";
-
+import { StateGraph, START, END, MemorySaver } from "@langchain/langgraph";
 import { AgentState } from "./state";
-
-import { analyzeGapNode, generateDocumentNode, selectJobNode, tailorResumeNode } from "./nodes/nodes";
+import { analyzeGapNode, generateDocumentNode, tailorResumeNode } from "./nodes/nodes";
 import { searchJobsNode } from "./nodes/searchJobsNode";
 import { parseResumeNode } from "./nodes/parseResumeNode";
 import { rankJobsNode } from "./nodes/rankJobsNode";
+import { selectJobNode } from "./nodes/selectJobNode";
 
 export const graph = new StateGraph(AgentState)
 
@@ -39,4 +38,6 @@ export const graph = new StateGraph(AgentState)
 
                             .addEdge("generateDocument", END)
 
-                            .compile();
+                            .compile({
+                                checkpointer: new MemorySaver()
+                            });

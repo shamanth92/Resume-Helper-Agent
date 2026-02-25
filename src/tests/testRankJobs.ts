@@ -107,6 +107,7 @@ async function testRankJobs() {
                     job_salary_string: "$145,000 - $175,000"
                 }
             ],
+            rankedJobs: undefined,
             selectedJob: undefined,
             tailoredResume: undefined,
             gapAnalysis: undefined,
