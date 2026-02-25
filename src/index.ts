@@ -10,15 +10,16 @@ async function main() {
     // Run the graph
     const result: any = await runGraph({
         resume: resumeText,
-        job: 'Senior Front End Developer',
+        job: 'Senior Frontend Engineer',
         jobType: 'Full-time',
-        jobLocation: 'USA'
+        jobLocation: 'Remote'
     });
 
     if (result) {
         console.log('\n📊 Final Result:');
         console.log('Selected Job:', result.selectedJob?.job_title);
         console.log('Company:', result.selectedJob?.employer_name);
+        console.log('Gap Analysis:', result.gapAnalysis);
     }
 }
 

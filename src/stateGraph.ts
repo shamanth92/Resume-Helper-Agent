@@ -1,10 +1,11 @@
 import { StateGraph, START, END, MemorySaver } from "@langchain/langgraph";
 import { AgentState } from "./state";
-import { analyzeGapNode, generateDocumentNode, tailorResumeNode } from "./nodes/nodes";
+import { generateDocumentNode, tailorResumeNode } from "./nodes/nodes";
 import { searchJobsNode } from "./nodes/searchJobsNode";
 import { parseResumeNode } from "./nodes/parseResumeNode";
 import { rankJobsNode } from "./nodes/rankJobsNode";
 import { selectJobNode } from "./nodes/selectJobNode";
+import { analyzeGapNode } from "./nodes/analyzeGapsNode";
 
 export const graph = new StateGraph(AgentState)
 

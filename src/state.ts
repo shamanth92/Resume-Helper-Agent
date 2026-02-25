@@ -51,6 +51,13 @@ export const RankedJobSchema = z.object({
         similarity: z.number(),
     }).optional()
 
+export const GapAnalysisSchema = z.object({
+        matchingSkills: z.array(z.string()),
+        missingSkills: z.array(z.string()),
+        keywordsToAdd: z.array(z.string()),
+        experienceAlignment: z.string(),
+    })
+
 export const AgentState = new StateSchema({
     resume: z.string(),
     resumeData: ResumeSchema.optional(),
@@ -75,11 +82,6 @@ export const AgentState = new StateSchema({
             year: z.string().optional(),
         })),
     }).optional(),
-    gapAnalysis: z.object({
-        matchingSkills: z.array(z.string()),
-        missingSkills: z.array(z.string()),
-        keywordsToAdd: z.array(z.string()),
-        experienceAlignment: z.string(),
-    }).optional(),
+    gapAnalysis: GapAnalysisSchema.optional(),
     outputPath: z.string().optional(),
 });

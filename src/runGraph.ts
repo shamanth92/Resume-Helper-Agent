@@ -51,7 +51,7 @@ export const runGraph = async (initialState: {
 
             // Display job options
             interruptData.value.options?.forEach((option: any) => {
-                const job = result.rankedJobs?.[option.value];
+                const job = result.rankedJobs?.[option.value - 1];  // Convert to 0-based for array access
                 if (job) {
                     console.log(`[${option.value}] ${option.label}`);
                     console.log(`    ${job.employer_name} - ${job.job_location}`);
@@ -63,12 +63,14 @@ export const runGraph = async (initialState: {
             const userInput = await getUserInput('Enter your selection: ');
             const selection = parseInt(userInput.trim());
 
-            if (isNaN(selection) || !result.rankedJobs?.[selection]) {
+            // Validate selection (1-based indexing)
+            if (isNaN(selection) || selection < 1 || selection > (result.rankedJobs?.length || 0)) {
                 console.log('\n Invalid selection');
                 return null;
             }
 
-            console.log(`\n Selected: ${result.rankedJobs[selection].job_title} at ${result.rankedJobs[selection].employer_name}\n`);
+            const selectedJob = result.rankedJobs[selection - 1];  // Convert to 0-based for array access
+            console.log(`\n Selected: ${selectedJob.job_title} at ${selectedJob.employer_name}\n`);
 
             // Phase 2: Resume with Command({ resume: value })
             // The value passed here becomes the return value of interrupt() in the node
