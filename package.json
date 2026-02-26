@@ -13,6 +13,7 @@
     "test:search": "tsx src/tests/testSearchJobs.ts",
     "test:rank": "tsx src/tests/testRankJobs.ts",
     "test:gap": "tsx src/tests/testAnalyzeGap.ts",
+    "test:tailor": "tsx src/tests/testTailorResume.ts",
     "test:interrupt": "tsx src/tests/testInterrupt.ts",
     "test:interrupt:manual": "tsx src/tests/testInterruptManual.ts",
     "test:full": "tsx src/tests/testFullGraph.ts",

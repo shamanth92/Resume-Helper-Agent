@@ -58,16 +58,7 @@ export const GapAnalysisSchema = z.object({
         experienceAlignment: z.string(),
     })
 
-export const AgentState = new StateSchema({
-    resume: z.string(),
-    resumeData: ResumeSchema.optional(),
-    job: z.string(),
-    jobType: z.string(),
-    jobLocation: z.string(),
-    jobResults: JobResultsSchema.array().optional(),
-    rankedJobs: RankedJobSchema.array().optional(),
-    selectedJob: JobResultsSchema.optional(),
-    tailoredResume: z.object({
+export const TailoredResumeSchema = z.object({
         summary: z.string(),
         experience: z.array(z.object({
             title: z.string(),
@@ -79,9 +70,20 @@ export const AgentState = new StateSchema({
         education: z.array(z.object({
             degree: z.string(),
             institution: z.string(),
-            year: z.string().optional(),
+            year: z.string(),
         })),
-    }).optional(),
+    })
+
+export const AgentState = new StateSchema({
+    resume: z.string(),
+    resumeData: ResumeSchema.optional(),
+    job: z.string(),
+    jobType: z.string(),
+    jobLocation: z.string(),
+    jobResults: JobResultsSchema.array().optional(),
+    rankedJobs: RankedJobSchema.array().optional(),
+    selectedJob: JobResultsSchema.optional(),
+    tailoredResume: TailoredResumeSchema.optional(),
     gapAnalysis: GapAnalysisSchema.optional(),
     outputPath: z.string().optional(),
 });
