@@ -12,15 +12,15 @@ async function main() {
         resume: resumeText,
         job: 'Senior Frontend Engineer',
         jobType: 'Full-time',
-        jobLocation: 'New York, NY'
+        jobLocation: 'California'
     });
 
     if (result) {
         console.log('\n📊 Final Result:');
         console.log('Selected Job:', result.selectedJob?.job_title);
         console.log('Company:', result.selectedJob?.employer_name);
-        console.log('Gap Analysis:', result.gapAnalysis);
-        console.log('Tailored Resume:', result.tailoredResume);
+        // console.log('Gap Analysis:', result.gapAnalysis);
+        // console.log('Tailored Resume:', result.tailoredResume);
     }
 }
 

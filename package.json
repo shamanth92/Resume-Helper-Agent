@@ -14,6 +14,7 @@
     "test:rank": "tsx src/tests/testRankJobs.ts",
     "test:gap": "tsx src/tests/testAnalyzeGap.ts",
     "test:tailor": "tsx src/tests/testTailorResume.ts",
+    "test:docx": "tsx src/tests/testDocx.ts",
     "test:interrupt": "tsx src/tests/testInterrupt.ts",
     "test:interrupt:manual": "tsx src/tests/testInterruptManual.ts",
     "test:full": "tsx src/tests/testFullGraph.ts",
@@ -25,13 +26,16 @@
     "@langchain/langgraph": "^1.1.5",
     "@langchain/openai": "^1.2.8",
     "axios": "^1.13.5",
+    "docx": "^9.6.0",
     "dotenv": "^17.3.1",
+    "file-saver": "^2.0.5",
     "langchain": "^1.2.25",
     "ml-distance": "^4.0.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^25.3.0",
     "tsx": "^4.21.0"
   }
