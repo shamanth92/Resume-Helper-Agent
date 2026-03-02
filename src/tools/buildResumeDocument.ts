@@ -1,4 +1,4 @@
-import { ResumeSchema, TailoredResumeSchema } from "./state";
+import { ResumeSchema, TailoredResumeSchema } from "../agent/state";
 import * as z from "zod";
 import { Document, AlignmentType, HeadingLevel, Paragraph, TextRun, convertInchesToTwip } from "docx";
 

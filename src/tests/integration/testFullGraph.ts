@@ -1,4 +1,4 @@
-import { graph } from '../stateGraph';
+import { graph } from '../../agent/graph';
 import * as readline from 'readline';
 import * as fs from 'fs';
 import * as path from 'path';

@@ -1,6 +1,6 @@
-import { model } from "../model";
+import { model } from "../config/model";
 import { ParseResumePrompt } from "../prompts/parseResumePrompt";
-import { AgentState, ResumeSchema } from "../state";
+import { AgentState, ResumeSchema } from "../agent/state";
 import { ZodError } from "zod";
 
 const MAX_RETRIES = 3;

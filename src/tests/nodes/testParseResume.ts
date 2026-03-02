@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
-import { parseResumeNode } from '../nodes/parseResumeNode';
-import { AgentState } from '../state';
+import { parseResumeNode } from '../../nodes/parseResumeNode';
+import { AgentState } from '../../agent/state';
 
 async function testSingleResume(filePath: string, testName: string) {
     console.log(`\n${'='.repeat(60)}`);

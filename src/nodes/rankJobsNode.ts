@@ -1,6 +1,6 @@
-import { doEmbeddings } from "../embeddings";
-import { AgentState } from "../state";
-import { cosineSimilarity } from "../cosineSimilarity";
+import { AgentState } from "../agent/state";
+import { doEmbeddings } from "../tools/embeddings";
+import { cosineSimilarity } from "../tools/cosineSimilarity";
 
 export const rankJobsNode = async(state: typeof AgentState.State) => {
     const { resumeEmbedding, jobEmbeddings } = await doEmbeddings(state.jobResults!, state.resumeData);

@@ -1,4 +1,4 @@
-import { graph } from "../stateGraph";
+import { graph } from "../agent/graph";
 
 async function testPhase1() {
     const result = await graph.invoke({

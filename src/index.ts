@@ -1,10 +1,10 @@
-import { runGraph } from './runGraph';
+import { runGraph } from './agent/runner';
 import * as fs from 'fs';
 import * as path from 'path';
 
 async function main() {
     // Load resume from file
-    const resumePath = path.join(process.cwd(), 'src','tests','sample-resumes', 'sample-resume-2.txt');
+    const resumePath = path.join(process.cwd(), 'src','tests','fixtures','sample-resumes', 'sample-resume-2.txt');
     const resumeText = fs.readFileSync(resumePath, 'utf-8');
 
     // Run the graph

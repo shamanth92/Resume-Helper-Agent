@@ -1,5 +1,5 @@
-import { searchJobsNode } from '../nodes/searchJobsNode';
-import { AgentState } from '../state';
+import { searchJobsNode } from '../../nodes/searchJobsNode';
+import { AgentState } from '../../agent/state';
 
 async function testSearchJobs() {
     console.log('\n' + '='.repeat(60));

@@ -1,5 +1,5 @@
-import { rankJobsNode } from '../nodes/rankJobsNode';
-import { AgentState } from '../state';
+import { rankJobsNode } from '../../nodes/rankJobsNode';
+import { AgentState } from '../../agent/state';
 
 async function testRankJobs() {
     console.log('\n' + '='.repeat(60));

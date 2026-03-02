@@ -1,4 +1,4 @@
-import { GapAnalysisSchema, JobResultsSchema, ResumeSchema } from "../state"
+import { GapAnalysisSchema, JobResultsSchema, ResumeSchema } from "../agent/state"
 import * as z from "zod"
 
 export const TailorResumePrompt = (resumeData: z.infer<typeof ResumeSchema>, selectedJob: z.infer<typeof JobResultsSchema>,

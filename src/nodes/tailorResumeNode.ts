@@ -1,5 +1,5 @@
-import { AgentState, TailoredResumeSchema } from "../state";
-import { model } from "../model";
+import { AgentState, TailoredResumeSchema } from "../agent/state";
+import { model } from "../config/model";
 import { ZodError } from "zod";
 import { TailorResumePrompt } from "../prompts/tailorResumePrompt";
 

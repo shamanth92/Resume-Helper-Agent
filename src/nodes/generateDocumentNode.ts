@@ -1,6 +1,6 @@
 import { Packer } from "docx";
-import { buildResumeDocument } from "../buildResumeDocument";
-import { AgentState } from "../state";
+import { buildResumeDocument } from "../tools/buildResumeDocument";
+import { AgentState } from "../agent/state";
 import * as fs from 'fs';
 
 export const generateDocumentNode = (state: typeof AgentState.State) => {

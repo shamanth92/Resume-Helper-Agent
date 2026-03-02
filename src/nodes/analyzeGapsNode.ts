@@ -1,6 +1,6 @@
-import { model } from "../model";
+import { model } from "../config/model";
 import { AnalyzeGapPrompt } from "../prompts/analyzeGapPrompt";
-import { AgentState, GapAnalysisSchema } from "../state";
+import { AgentState, GapAnalysisSchema } from "../agent/state";
 import { ZodError } from "zod";
 
 const MAX_RETRIES = 3;

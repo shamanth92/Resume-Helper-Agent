@@ -1,4 +1,4 @@
-import { AgentState } from "../state";
+import { AgentState } from "../agent/state";
 import { interrupt } from "@langchain/langgraph";
 
 export const selectJobNode = (state: typeof AgentState.State) => {

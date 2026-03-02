@@ -1,4 +1,4 @@
-import { graph } from "./stateGraph";
+import { graph } from "./graph";
 import { Command } from "@langchain/langgraph";
 import * as readline from 'readline';
 

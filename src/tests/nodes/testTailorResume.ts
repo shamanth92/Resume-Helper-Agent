@@ -1,4 +1,4 @@
-import { tailorResumeNode } from '../nodes/tailorResumeNode';
+import { tailorResumeNode } from '../../nodes/tailorResumeNode';
 
 async function testTailorResume() {
     console.log('\n' + '='.repeat(60));

@@ -1,0 +1,137 @@
+S H A M A N T H K U M A R P A R A M E S H W A R
+S E N I O R F U L L S T A C K E N G I N E E R
+C O N T A C T
++1 413-270-5713
+alekh.shamanth@gmail.com
+600 N McClurg Court, Chicago, IL
+60611
+S K I L L S
+JavaScript
+TypeScript
+React
+Nextjs
+Angular
+Vue 3
+Material UI
+Node.js
+Apollo GraphQL
+C#
+ASP.NET Core
+Docker
+Kubernetes
+React Native
+AWS
+Git
+Jest
+React Testing Library
+MySQL
+MongoDB
+Visual Studio
+Figma
+P R O F E S S I O N A L S U M M A R Y
+Frontend-focused Senior Full Stack Engineer with 9 years of experience
+building modern web applications. Expert in JavaScript frontend
+technologies, with strong skills in React, UI development, and
+responsive design. Experienced in integrating APIs, working with
+GraphQL,. Familiar with mobile app development, and comfortable
+handling CI/CD, Docker, and AWS for deployment.
+W O R K E X P E R I E N C E
+Senior Full Stack Engineer NOVEMBER 2021 - PRESENT
+,
+Ahead, Inc
+Chicago, IL
+2) Mobile Application for a Energy company
+Worked as a Senior Full Stack Engineer.
+Responsible for architecting and developing the backend of a
+high-performing production-grade Flutter-based mobile app
+using Node.js and Apollo GraphQL.
+Designed and implemented a modular GraphQL architecture using
+Apollo Federation, building subgraphs based on functional
+domains.
+Wrote the entire GraphQL schema, along with efficient queries and
+mutations to support diverse application functionalities.
+Led backend infrastructure deployment: wrote and maintained
+Dockerfiles, GitLab CI/CD pipelines, and Kubernetes config files
+for backend deployment.
+Supported frontend development by implementing minor UI
+features in Flutter.
+1) Parking Management Web Application
+Led the modernization of a parking management application,
+focusing on performance, usability, and scalable frontend
+architecture.
+Architected and developed the frontend using React, Nextjs,
+TypeScript, Material UI ensuring maintainability and modular
+structure.
+Designed and implemented dynamic form handling in React,
+significantly accelerating form development and reducing
+repetitive code.
+Mentored two other junior front end developers.
+Collaborated closely with backend and UX teams to deliver a
+cohesive, high-quality user experience across the application.
+Involved in writing unit test cases using React Testing Library.
+HTTPS://GITHUB.COM/SHAMANT
+H92
+WWW.LINKEDIN.COM/IN
+/SHAMANTHKUMAR1992
+P R O F I L E S
+Frontend Software Engineer JULY 2020 - OCTOBER 2021
+ThinkMarkets
+Chicago, IL
+Built a trading web application from scratch using React.
+Developed key trading features including Watchlists, Live News,
+Trading Charts, Positions, and Orders.
+Integrated live price feeds via WebSocket using STOMP client,
+enabling real-time market data streaming.
+Utilized advanced React concepts including Routing, Form
+Validation, Redux Toolkit, and React Hooks.
+Worked with Product Developers and Designers who work
+globally in UK and Bulgaria to collect requirements and design
+mockups and wireframes.
+Involved in writing unit test cases using React Testing Library.
+Participated in peer code reviews at the end of each sprint.
+Software Engineer
+Miracle Software Systems
+Bentonville, AR
+Developed the front-end web application from scratch using
+Angular 7, TypeScript, HTML5, CSS3 and PrimeNG.
+Expert in Angular concepts such as Reactive Forms, Observables,
+Interpolation, Routing, Pipes, Services and Components. Using
+Angular Best Practices to improve the efficiency of the code.
+Developed the UI pages from UX wireframes and mockups.
+Worked with Jasmine and Karma to write front end Unit Test
+Cases. Helped the team to reduce the time on executing test cases
+by making them run in parallel.
+Worked in an Agile environment with 2-week sprints.
+Involved in Code Reviews at the end of every sprint.
+October 2018 - July 2020
+E D U C A T I O N
+MS IN ELECTRICAL AND
+COMPUTER ENGINEERING, UMASS
+AMHERST
+BE IN ELECTRONICS AND
+COMMUNICATION ENGINEERING,
+UVCE, INDIA
+C E R T I F I C A T I O N S
+Software Engineering Analyst
+Accenture
+Bengaluru, India
+Worked as a Front End Developer for 2 different clients – ANZ and
+Vodafone. Collaborated in a 10-person team to design the front￾end UI using JavaScript, Java based tool called Pega, HTML and
+CSS.
+July 2014 - July 2016
+AWS CLOUD PRACTITIONER
+AWS CERTIFIED SOLUTIONS
+ARCHITECT - ASSOCIATE
+App has been in production for over a year, maintaining a 4.5-star
+rating; the GraphQL backend significantly improved response time
+and performance.
+Trained internal teams on GraphQL best practices and helped them
+successfully integrate GraphQL into their applications, promoting
+cross-team adoption.
+Developed unit tests for GraphQL using Jest, ensuring stability and
+test coverage.
+Involved in resolving production defects.
+Set up AWS CloudWatch Logs in production to monitor API errors
+and system issues
+Conducted load testing for GraphQL endpoints using K6 to validate
+performance under stress.

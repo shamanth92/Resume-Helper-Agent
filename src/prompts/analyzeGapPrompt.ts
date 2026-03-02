@@ -1,4 +1,4 @@
-import { JobResultsSchema, ResumeSchema } from "../state"
+import { JobResultsSchema, ResumeSchema } from "../agent/state"
 import * as z from "zod";
 
 export const AnalyzeGapPrompt = (parsedResume: z.infer<typeof ResumeSchema>, selectedJob: z.infer<typeof JobResultsSchema>) =>  `You are an expert at reviewing resumes.

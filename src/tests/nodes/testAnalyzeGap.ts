@@ -1,4 +1,4 @@
-import { analyzeGapNode } from '../nodes/analyzeGapsNode';
+import { analyzeGapNode } from '../../nodes/analyzeGapsNode';
 
 async function testAnalyzeGap() {
     console.log('\n' + '='.repeat(60));
