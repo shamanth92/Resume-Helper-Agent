@@ -1,95 +1,61 @@
+import dotenv from "dotenv";
+
+// Load environment variables first
+dotenv.config();
+
 import express from "express";
-import { resumeGraph, runGraph } from "../agent/runner";
-import { ExecutionState } from "./agentTypes";
+import cors from "cors";
+import { config, validateEnv } from "../config/env";
+
+// Validate environment variables after loading
+validateEnv();
+
+import { StateManager } from "./services/stateManager";
+import { createResumeRoutes } from "./routes/resume";
+import { requestLogger } from "./middleware/requestLogger";
+import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
-const PORT = 3000;
+
+// Initialize state manager
+const stateManager = new StateManager();
+
+// Middleware
+app.use(cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3001',
+    credentials: true
+}));
 
 app.use(express.json());
+app.use(requestLogger);
 
-const executionStates = new Map<string, ExecutionState>();
-
-app.post("/api/resume/startAgent", (req, res) => {
-    try {
-        const { resumeText, job, jobType, jobLocation } = req.body;
-
-        // Validate required fields
-        if (!resumeText || !job || !jobType || !jobLocation) {
-            return res.status(400).json({
-                error: "Missing required fields",
-                required: ["resumeText", "job", "jobType", "jobLocation"]
-            });
-        }
-
-        const threadId = `resume-helper-${Date.now()}`;
-
-        executionStates.set(threadId, {
-            status: "running",
-            data: {},
-            startedAt: new Date(),
-            updatedAt: new Date()
-        })
-
-        // Start graph execution in background
-        runGraph({
-            resume: resumeText,
-            job,
-            jobType,
-            jobLocation,
-            threadId,
-            executionStates
-        }).catch(error => {
-            console.error(`❌ Error in thread ${threadId}:`, error);
-            // TODO: Store error state for polling endpoint to retrieve
-        });
-
-        res.status(202).json({
-            threadId,
-            message: "Agent started successfully"
-        });
-    } catch (error) {
-        console.error("Error starting agent:", error);
-        res.status(500).json({
-            error: "Failed to start agent",
-            message: error instanceof Error ? error.message : "Unknown error"
-        });
-    }
-    return null
-});
-
-app.get("/api/resume/getAgentStatus", (req, res) => {
-    const { threadId } = req.query;
-    if (!threadId) {
-        return res.status(400).json({
-            error: "Missing threadId"
-        })
-    }
-    const state = executionStates.get(threadId as string)
-    if (!state) {
-        return res.status(404).json({
-            error: "Thread not found"
-        })
-    }
-    res.json(state);
-    return null
-})
-
-app.post("/api/resume/selectJob", (req, res) => {
-    const { threadId, selectedJobIndex } = req.body;
-    if (!threadId || !selectedJobIndex) {
-        return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    resumeGraph(threadId, selectedJobIndex, executionStates)
-        .catch(error => {
-            console.error(`❌ Error resuming thread ${threadId}:`, error);
-        });
-
-    return res.status(202).json({
-        message: "Agent started successfully"
+// Health check endpoint
+app.get("/health", (_req, res) => {
+    res.json({ 
+        status: "ok", 
+        timestamp: new Date().toISOString(),
+        environment: config.nodeEnv
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// Routes
+app.use("/api/resume", createResumeRoutes(stateManager.getStates()));
+
+// Error handling middleware (must be last)
+app.use(errorHandler);
+
+// Start server
+const server = app.listen(config.port, () => {
+    console.log(`🚀 Server running on port ${config.port}`);
+    console.log(`📝 Environment: ${config.nodeEnv}`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+    console.log('SIGTERM received, shutting down gracefully...');
+    stateManager.cleanup();
+    server.close(() => {
+        console.log('Server closed');
+        process.exit(0);
+    });
 });
