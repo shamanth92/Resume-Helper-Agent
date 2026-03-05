@@ -1,98 +1,100 @@
 import { graph } from "./graph";
 import { Command } from "@langchain/langgraph";
-import * as readline from 'readline';
-
-async function getUserInput(prompt: string): Promise<string> {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-
-    return new Promise((resolve) => {
-        rl.question(prompt, (answer) => {
-            rl.close();
-            resolve(answer);
-        });
-    });
-}
+import { ExecutionState } from "../apis/agentTypes";
 
 export const runGraph = async (initialState: {
     resume: string;
     job: string;
     jobType: string;
     jobLocation: string;
+    threadId: string;
+    executionStates: Map<string, ExecutionState>;
 }) => {
-    const threadId = `resume-helper-${Date.now()}`;
+    const config = {
+        configurable: { thread_id: initialState.threadId }
+    };
+
+    console.log(`\n Starting agent for thread: ${initialState.threadId}`);
+
+    try {
+        // Execute graph until interrupt or completion
+        const result = await graph.invoke({
+            ...initialState,
+            executionStates: initialState.executionStates,
+            threadId: initialState.threadId
+        }, config) as any;
+
+        // If completed without interrupt, mark as completed
+        if (!result.__interrupt__) {
+            initialState.executionStates.set(initialState.threadId, {
+                ...initialState.executionStates.get(initialState.threadId)!,
+                status: "completed",
+                updatedAt: new Date()
+            });
+            console.log(` Agent completed for thread: ${initialState.threadId}`);
+        } else {
+            console.log(` Agent paused at interrupt for thread: ${initialState.threadId}`);
+        }
+
+        return result;
+
+    } catch (error) {
+        console.error(` Error in thread ${initialState.threadId}:`, error);
+        
+        // Update state to failed
+        initialState.executionStates.set(initialState.threadId, {
+            ...initialState.executionStates.get(initialState.threadId)!,
+            status: "failed",
+            error: error instanceof Error ? error.message : "Unknown error",
+            updatedAt: new Date()
+        });
+        
+        throw error;
+    }
+}
+
+export const resumeGraph = async (
+    threadId: string,
+    selectedJobIndex: number,
+    executionStates: Map<string, ExecutionState>
+) => {
     const config = {
         configurable: { thread_id: threadId }
     };
 
-    console.log('\n' + '='.repeat(60));
-    console.log(' RESUME HELPER AGENT');
-    console.log('='.repeat(60));
-    console.log(`\nJob: ${initialState.job}`);
-    console.log(`Type: ${initialState.jobType}`);
-    console.log(`Location: ${initialState.jobLocation}`);
-    console.log(`Thread ID: ${threadId}\n`);
+    console.log(`\n Resuming agent for thread: ${threadId} with selection: ${selectedJobIndex}`);
 
     try {
-        // Phase 1: Initial invoke - runs until interrupt() is called
-        console.log(' Processing resume and searching for jobs...\n');
-        
-        const result = await graph.invoke(initialState, config) as any;
+        // Resume graph with user's job selection
+        // Pass executionStates and threadId so subsequent nodes can update the Map
+        const finalResult = await graph.invoke(
+            new Command({ 
+                resume: selectedJobIndex,
+                update: { executionStates, threadId }
+            }),
+            config
+        );
 
-        // Check if we hit an interrupt using __interrupt__ property
-        if (result.__interrupt__) {
-            const interruptData = result.__interrupt__[0];
-            
-            console.log('\n' + '='.repeat(60));
-            console.log('  ' + interruptData.value.message);
-            console.log('='.repeat(60) + '\n');
+        // Mark as completed
+        executionStates.set(threadId, {
+            ...executionStates.get(threadId)!,
+            status: "completed",
+            updatedAt: new Date()
+        });
 
-            // Display job options
-            interruptData.value.options?.forEach((option: any) => {
-                const job = result.rankedJobs?.[option.value - 1];  // Convert to 0-based for array access
-                if (job) {
-                    console.log(`[${option.value}] ${option.label}`);
-                    console.log(`    ${job.employer_name} - ${job.job_location}`);
-                    console.log(`    Match: ${((job.similarity || 0) * 100).toFixed(1)}% | Salary: ${job.job_salary_string || 'N/A'}\n`);
-                }
-            });
-
-            // Get user selection
-            const userInput = await getUserInput('Enter your selection: ');
-            const selection = parseInt(userInput.trim());
-
-            // Validate selection (1-based indexing)
-            if (isNaN(selection) || selection < 1 || selection > (result.rankedJobs?.length || 0)) {
-                console.log('\n Invalid selection');
-                return null;
-            }
-
-            const selectedJob = result.rankedJobs[selection - 1];  // Convert to 0-based for array access
-            console.log(`\n Selected: ${selectedJob.job_title} at ${selectedJob.employer_name}\n`);
-
-            // Phase 2: Resume with Command({ resume: value })
-            // The value passed here becomes the return value of interrupt() in the node
-            console.log(' Continuing workflow...\n');
-            
-            const finalResult = await graph.invoke(
-                new Command({ resume: selection }),
-                config  // Must use same thread_id
-            );
-
-            console.log('\n' + '='.repeat(60));
-            console.log(' WORKFLOW COMPLETED');
-            console.log('='.repeat(60));
-
-            return finalResult;
-        }
-
-        console.log('\n No interrupt detected');
-        return result;
+        console.log(` Agent completed for thread: ${threadId}`);
+        return finalResult;
 
     } catch (error) {
-        console.error('\n Error:', error);
+        console.error(` Error resuming thread ${threadId}:`, error);
+        
+        executionStates.set(threadId, {
+            ...executionStates.get(threadId)!,
+            status: "failed",
+            error: error instanceof Error ? error.message : "Unknown error",
+            updatedAt: new Date()
+        });
+        
         throw error;
     }
 }

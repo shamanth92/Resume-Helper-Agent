@@ -33,6 +33,14 @@ export const tailorResumeNode = async (state: typeof AgentState.State) => {
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
         try {
             console.log(`[Attempt ${attempt}/${MAX_RETRIES}] Tailoring resume...`);
+            if (state.executionStates && state.threadId) {
+                state.executionStates.set(state.threadId, {
+                    ...state.executionStates.get(state.threadId)!,
+                    currentNode: "tailorResume",
+                    status: "tailoring_resume",
+                    updatedAt: new Date()
+                });
+            }
 
             // Call LLM with structured output
             const structuredTailoredResume = model.withStructuredOutput(TailoredResumeSchema);
@@ -48,6 +56,16 @@ export const tailorResumeNode = async (state: typeof AgentState.State) => {
                 skills: validatedData.skills || [],
                 education: validatedData.education || [],
             };
+
+            if (state.executionStates && state.threadId) {
+                state.executionStates.set(state.threadId, {
+                    ...state.executionStates.get(state.threadId)!,
+                    currentNode: "tailorResume",
+                    status: "tailoring_resume",
+                    data: { ...state.executionStates.get(state.threadId)!.data, tailoredResume: dataWithFallbacks },
+                    updatedAt: new Date()
+                });
+            }
 
             return {
                 tailoredResume: dataWithFallbacks

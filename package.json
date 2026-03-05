@@ -7,7 +7,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "tsx src/index.ts",
+    "start": "tsx src/apis/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:parse": "tsx src/tests/nodes/testParseResume.ts",
     "test:search": "tsx src/tests/nodes/testSearchJobs.ts",
@@ -26,6 +26,7 @@
     "axios": "^1.13.5",
     "docx": "^9.6.0",
     "dotenv": "^17.3.1",
+    "express": "^5.2.1",
     "file-saver": "^2.0.5",
     "langchain": "^1.2.25",
     "ml-distance": "^4.0.1",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
+    "@types/express": "^5.0.6",
     "@types/file-saver": "^2.0.7",
     "@types/node": "^25.3.0",
     "tsx": "^4.21.0"
