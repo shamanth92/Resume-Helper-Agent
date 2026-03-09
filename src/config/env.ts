@@ -28,5 +28,11 @@ export const config = {
     },
     get nodeEnv() {
         return process.env.NODE_ENV || 'development';
+    },
+    get s3Bucket() {
+        return process.env.S3_BUCKET;
+    },
+    get awsRegion() {
+        return process.env.AWS_REGION;
     }
 };
