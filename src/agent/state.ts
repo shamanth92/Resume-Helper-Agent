@@ -1,6 +1,6 @@
 import { StateSchema } from "@langchain/langgraph";
 import * as z from "zod";
-import { ExecutionState } from "../apis/agentTypes";
+import { StateManager } from "../apis/services/stateManager";
 
 export const ResumeSchema = z.object({
     contact: z.object({
@@ -88,5 +88,5 @@ export const AgentState = new StateSchema({
     gapAnalysis: GapAnalysisSchema.optional(),
     outputPath: z.string().optional(),
     threadId: z.string().optional(),
-    executionStates: z.custom<Map<string, ExecutionState>>().optional(),
+    stateManager: z.custom<StateManager>().optional(),
 });

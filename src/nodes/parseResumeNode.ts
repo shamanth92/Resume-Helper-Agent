@@ -30,13 +30,16 @@ export const parseResumeNode = async (state: typeof AgentState.State) => {
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
         try {
             console.log(`[Attempt ${attempt}/${MAX_RETRIES}] Parsing resume...`);
-            if (state.executionStates && state.threadId) {
-                state.executionStates.set(state.threadId, {
-                    ...state.executionStates.get(state.threadId)!,
-                    currentNode: "parseResume",
-                    status: "parsing_resume",
-                    updatedAt: new Date()
-                });
+            if (state.stateManager && state.threadId) {
+                const currentState = await state.stateManager.getState(state.threadId);
+                if (currentState) {
+                    await state.stateManager.setState(state.threadId, {
+                        ...currentState,
+                        currentNode: "parseResume",
+                        status: "parsing_resume",
+                        updatedAt: new Date()
+                    });
+                }
             }
 
             // Call LLM with structured output
@@ -61,14 +64,17 @@ export const parseResumeNode = async (state: typeof AgentState.State) => {
                 skills: validatedData.skills || [],
             };
 
-            if (state.executionStates && state.threadId) {
-                state.executionStates.set(state.threadId, {
-                    ...state.executionStates.get(state.threadId)!,
-                    currentNode: "parseResume",
-                    status: "parsing_resume",
-                    data: { ...state.executionStates.get(state.threadId)!.data, resumeData: dataWithFallbacks },
-                    updatedAt: new Date()
-                });
+            if (state.stateManager && state.threadId) {
+                const currentState = await state.stateManager.getState(state.threadId);
+                if (currentState) {
+                    await state.stateManager.setState(state.threadId, {
+                        ...currentState,
+                        currentNode: "parseResume",
+                        status: "parsing_resume",
+                        data: { ...currentState.data, resumeData: dataWithFallbacks },
+                        updatedAt: new Date()
+                    });
+                }
             }
 
             return {

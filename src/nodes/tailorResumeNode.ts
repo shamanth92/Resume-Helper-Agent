@@ -33,13 +33,16 @@ export const tailorResumeNode = async (state: typeof AgentState.State) => {
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
         try {
             console.log(`[Attempt ${attempt}/${MAX_RETRIES}] Tailoring resume...`);
-            if (state.executionStates && state.threadId) {
-                state.executionStates.set(state.threadId, {
-                    ...state.executionStates.get(state.threadId)!,
-                    currentNode: "tailorResume",
-                    status: "tailoring_resume",
-                    updatedAt: new Date()
-                });
+            if (state.stateManager && state.threadId) {
+                const currentState = await state.stateManager.getState(state.threadId);
+                if (currentState) {
+                    await state.stateManager.setState(state.threadId, {
+                        ...currentState,
+                        currentNode: "tailorResume",
+                        status: "tailoring_resume",
+                        updatedAt: new Date()
+                    });
+                }
             }
 
             // Call LLM with structured output
@@ -57,14 +60,17 @@ export const tailorResumeNode = async (state: typeof AgentState.State) => {
                 education: validatedData.education || [],
             };
 
-            if (state.executionStates && state.threadId) {
-                state.executionStates.set(state.threadId, {
-                    ...state.executionStates.get(state.threadId)!,
-                    currentNode: "tailorResume",
-                    status: "tailoring_resume",
-                    data: { ...state.executionStates.get(state.threadId)!.data, tailoredResume: dataWithFallbacks },
-                    updatedAt: new Date()
-                });
+            if (state.stateManager && state.threadId) {
+                const currentState = await state.stateManager.getState(state.threadId);
+                if (currentState) {
+                    await state.stateManager.setState(state.threadId, {
+                        ...currentState,
+                        currentNode: "tailorResume",
+                        status: "tailoring_resume",
+                        data: { ...currentState.data, tailoredResume: dataWithFallbacks },
+                        updatedAt: new Date()
+                    });
+                }
             }
 
             return {

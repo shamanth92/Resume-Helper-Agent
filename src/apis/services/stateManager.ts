@@ -1,47 +1,70 @@
 import { ExecutionState } from "../agentTypes";
+import redis from "../state/redis";
 
 export class StateManager {
-    private executionStates: Map<string, ExecutionState>;
-    private readonly EXECUTION_TTL = 24 * 60 * 60 * 1000; // 24 hours
-    private cleanupInterval?: NodeJS.Timeout;
+    private readonly EXECUTION_TTL = 24 * 60 * 60; // 24 hours in seconds (for Redis TTL)
+    private readonly KEY_PREFIX = "execution:";
 
     constructor() {
-        this.executionStates = new Map<string, ExecutionState>();
-        this.startCleanup();
+        // No initialization needed - Redis handles persistence
     }
 
-    private startCleanup() {
-        // Cleanup mechanism - remove old execution states after 24 hours
-        this.cleanupInterval = setInterval(() => {
-            const now = Date.now();
-            for (const [threadId, state] of this.executionStates.entries()) {
-                if (now - state.updatedAt.getTime() > this.EXECUTION_TTL) {
-                    this.executionStates.delete(threadId);
-                    console.log(`🧹 Cleaned up expired thread: ${threadId}`);
-                }
-            }
-        }, 60 * 60 * 1000); // Run cleanup every hour
+    private getKey(threadId: string): string {
+        return `${this.KEY_PREFIX}${threadId}`;
     }
 
-    getStates(): Map<string, ExecutionState> {
-        return this.executionStates;
-    }
-
-    getState(threadId: string): ExecutionState | undefined {
-        return this.executionStates.get(threadId);
-    }
-
-    setState(threadId: string, state: ExecutionState): void {
-        this.executionStates.set(threadId, state);
-    }
-
-    deleteState(threadId: string): boolean {
-        return this.executionStates.delete(threadId);
-    }
-
-    cleanup(): void {
-        if (this.cleanupInterval) {
-            clearInterval(this.cleanupInterval);
+    async getState(threadId: string): Promise<ExecutionState | null> {
+        try {
+            const data = await redis.get(this.getKey(threadId));
+            if (!data) return null;
+            
+            const state = JSON.parse(data);
+            // Convert date strings back to Date objects
+            return {
+                ...state,
+                startedAt: state.startedAt ? new Date(state.startedAt) : undefined,
+                updatedAt: new Date(state.updatedAt)
+            };
+        } catch (error) {
+            console.error(`Error getting state for ${threadId}:`, error);
+            return null;
         }
+    }
+
+    async setState(threadId: string, state: ExecutionState): Promise<void> {
+        try {
+            const key = this.getKey(threadId);
+            await redis.setex(key, this.EXECUTION_TTL, JSON.stringify(state));
+        } catch (error) {
+            console.error(`Error setting state for ${threadId}:`, error);
+            throw error;
+        }
+    }
+
+    async deleteState(threadId: string): Promise<boolean> {
+        try {
+            const result = await redis.del(this.getKey(threadId));
+            return result > 0;
+        } catch (error) {
+            console.error(`Error deleting state for ${threadId}:`, error);
+            return false;
+        }
+    }
+
+    async cleanup(): Promise<void> {
+        try {
+            await redis.quit();
+            console.log("Redis connection closed");
+        } catch (error) {
+            console.error("Error closing Redis connection:", error);
+        }
+    }
+
+    // Helper method for backward compatibility with routes that expect a Map
+    // This creates a temporary in-memory Map for the current request
+    async getStatesMap(): Promise<Map<string, ExecutionState>> {
+        // This is a compatibility layer - in practice, routes should use getState/setState directly
+        // For now, return an empty Map since routes will use the StateManager methods
+        return new Map<string, ExecutionState>();
     }
 }

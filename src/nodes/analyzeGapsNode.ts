@@ -31,14 +31,16 @@ export const analyzeGapNode = async (state: typeof AgentState.State) => {
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
         try {
             console.log(`[Attempt ${attempt}/${MAX_RETRIES}] Analyzing gaps...`);
-            if (state.executionStates && state.threadId) {
-                state.executionStates.set(state.threadId, {
-                    ...state.executionStates.get(state.threadId)!,
-                    currentNode: "analyzeGap",
-                    status: "gap_analysis",
-                    // data: { ...state.executionStates.get(state.threadId)!.data, gapAnalysis: dataWithFallbacks },
-                    updatedAt: new Date()
-                });
+            if (state.stateManager && state.threadId) {
+                const currentState = await state.stateManager.getState(state.threadId);
+                if (currentState) {
+                    await state.stateManager.setState(state.threadId, {
+                        ...currentState,
+                        currentNode: "analyzeGap",
+                        status: "gap_analysis",
+                        updatedAt: new Date()
+                    });
+                }
             }
 
             // Call LLM with structured output
@@ -56,14 +58,17 @@ export const analyzeGapNode = async (state: typeof AgentState.State) => {
                 experienceAlignment: validatedData.experienceAlignment || "",
             };
 
-            if (state.executionStates && state.threadId) {
-                state.executionStates.set(state.threadId, {
-                    ...state.executionStates.get(state.threadId)!,
-                    currentNode: "analyzeGap",
-                    status: "gap_analysis",
-                    data: { ...state.executionStates.get(state.threadId)!.data, gapAnalysis: dataWithFallbacks },
-                    updatedAt: new Date()
-                });
+            if (state.stateManager && state.threadId) {
+                const currentState = await state.stateManager.getState(state.threadId);
+                if (currentState) {
+                    await state.stateManager.setState(state.threadId, {
+                        ...currentState,
+                        currentNode: "analyzeGap",
+                        status: "gap_analysis",
+                        data: { ...currentState.data, gapAnalysis: dataWithFallbacks },
+                        updatedAt: new Date()
+                    });
+                }
             }
 
             return {

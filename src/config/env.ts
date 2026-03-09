@@ -1,5 +1,5 @@
 export const validateEnv = () => {
-    const required = ['OPENAI_API_KEY', 'JSEARCH_API_KEY', 'JSEARCH_API_HOST'];
+    const required = ['OPENAI_API_KEY', 'JSEARCH_API_KEY', 'JSEARCH_API_HOST', 'S3_BUCKET', 'AWS_REGION'];
     const missing: string[] = [];
     
     required.forEach(key => {

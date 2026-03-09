@@ -1,18 +1,21 @@
 import { AgentState } from "../agent/state";
 import { interrupt } from "@langchain/langgraph";
 
-export const selectJobNode = (state: typeof AgentState.State) => {
-    if (state.executionStates && state.threadId) {
-        state.executionStates.set(state.threadId, {
-            ...state.executionStates.get(state.threadId)!,
-            currentNode: "selectJob",
-            status: "waiting_for_input",  // ← Key change
-            data: {
-                ...state.executionStates.get(state.threadId)!.data,
-                rankedJobs: state.rankedJobs  // Include ranked jobs for frontend
-            },
-            updatedAt: new Date()
-        });
+export const selectJobNode = async (state: typeof AgentState.State) => {
+    if (state.stateManager && state.threadId) {
+        const currentState = await state.stateManager.getState(state.threadId);
+        if (currentState) {
+            await state.stateManager.setState(state.threadId, {
+                ...currentState,
+                currentNode: "selectJob",
+                status: "waiting_for_input",
+                data: {
+                    ...currentState.data,
+                    rankedJobs: state.rankedJobs
+                },
+                updatedAt: new Date()
+            });
+        }
     }
 
     const humanSelectedJob = interrupt({
@@ -29,16 +32,19 @@ export const selectJobNode = (state: typeof AgentState.State) => {
 
     // Store selected job in data, but don't override status
     // Let the next nodes (analyzeGap, tailorResume) set their own statuses
-    if (state.executionStates && state.threadId) {
-        state.executionStates.set(state.threadId, {
-            ...state.executionStates.get(state.threadId)!,
-            currentNode: "selectJob",
-            data: {
-                ...state.executionStates.get(state.threadId)!.data,
-                selectedJob: state?.rankedJobs?.[humanSelectedJob - 1]
-            },
-            updatedAt: new Date()
-        });
+    if (state.stateManager && state.threadId) {
+        const currentState = await state.stateManager.getState(state.threadId);
+        if (currentState) {
+            await state.stateManager.setState(state.threadId, {
+                ...currentState,
+                currentNode: "selectJob",
+                data: {
+                    ...currentState.data,
+                    selectedJob: state?.rankedJobs?.[humanSelectedJob - 1]
+                },
+                updatedAt: new Date()
+            });
+        }
     }
 
     return {

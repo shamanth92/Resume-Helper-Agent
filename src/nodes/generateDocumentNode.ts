@@ -25,14 +25,18 @@ export const generateDocumentNode = async (state: typeof AgentState.State) => {
         Key: key,
     }), { expiresIn: 3600 });
 
-    if (state.executionStates && state.threadId) {
-        state.executionStates.set(state.threadId, {
-            ...state.executionStates.get(state.threadId)!,
-            data: {
-                ...state.executionStates.get(state.threadId)!.data,
-                outputPath: downloadUrl
-            }
-        });
+    if (state.stateManager && state.threadId) {
+        const currentState = await state.stateManager.getState(state.threadId);
+        if (currentState) {
+            await state.stateManager.setState(state.threadId, {
+                ...currentState,
+                data: {
+                    ...currentState.data,
+                    outputPath: downloadUrl
+                },
+                updatedAt: new Date()
+            });
+        }
     }
     
     console.log("Resume generated successfully")

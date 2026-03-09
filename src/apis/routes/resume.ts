@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { resumeGraph, runGraph } from "../../agent/runner";
-import { ExecutionState } from "../agentTypes";
+import { StateManager } from "../services/stateManager";
 
 const router = Router();
 
-export const createResumeRoutes = (executionStates: Map<string, ExecutionState>) => {
-    router.post("/startAgent", (req, res) => {
+export const createResumeRoutes = (stateManager: StateManager) => {
+    router.post("/startAgent", async (req, res) => {
         try {
             const { resumeText, job, jobType, jobLocation } = req.body;
 
@@ -19,12 +19,12 @@ export const createResumeRoutes = (executionStates: Map<string, ExecutionState>)
 
             const threadId = `resume-helper-${Date.now()}`;
 
-            executionStates.set(threadId, {
+            await stateManager.setState(threadId, {
                 status: "running",
                 data: {},
                 startedAt: new Date(),
                 updatedAt: new Date()
-            })
+            });
 
             // Start graph execution in background
             runGraph({
@@ -33,16 +33,19 @@ export const createResumeRoutes = (executionStates: Map<string, ExecutionState>)
                 jobType,
                 jobLocation,
                 threadId,
-                executionStates
-            }).catch(error => {
+                stateManager
+            }).catch(async (error) => {
                 console.error(`❌ Error in thread ${threadId}:`, error);
                 // Update state to failed so polling endpoint can retrieve error
-                executionStates.set(threadId, {
-                    ...executionStates.get(threadId)!,
-                    status: "failed",
-                    error: error instanceof Error ? error.message : "Unknown error",
-                    updatedAt: new Date()
-                });
+                const currentState = await stateManager.getState(threadId);
+                if (currentState) {
+                    await stateManager.setState(threadId, {
+                        ...currentState,
+                        status: "failed",
+                        error: error instanceof Error ? error.message : "Unknown error",
+                        updatedAt: new Date()
+                    });
+                }
             });
 
             res.status(202).json({
@@ -56,42 +59,45 @@ export const createResumeRoutes = (executionStates: Map<string, ExecutionState>)
                 message: error instanceof Error ? error.message : "Unknown error"
             });
         }
-        return null
     });
 
-    router.get("/getAgentStatus", (req, res) => {
+    router.get("/getAgentStatus", async (req, res) => {
         const { threadId } = req.query;
         if (!threadId) {
             return res.status(400).json({
                 error: "Missing threadId"
-            })
+            });
         }
-        const state = executionStates.get(threadId as string)
+        
+        const state = await stateManager.getState(threadId as string);
         if (!state) {
             return res.status(404).json({
                 error: "Thread not found"
-            })
+            });
         }
+        
         res.json(state);
-        return null
     });
 
-    router.post("/selectJob", (req, res) => {
+    router.post("/selectJob", async (req, res) => {
         const { threadId, selectedJobIndex } = req.body;
         if (!threadId || !selectedJobIndex) {
             return res.status(400).json({ error: "Missing required fields" });
         }
 
-        resumeGraph(threadId, selectedJobIndex, executionStates)
-            .catch(error => {
+        resumeGraph(threadId, selectedJobIndex, stateManager)
+            .catch(async (error) => {
                 console.error(`❌ Error resuming thread ${threadId}:`, error);
                 // Update state to failed
-                executionStates.set(threadId, {
-                    ...executionStates.get(threadId)!,
-                    status: "failed",
-                    error: error instanceof Error ? error.message : "Unknown error",
-                    updatedAt: new Date()
-                });
+                const currentState = await stateManager.getState(threadId);
+                if (currentState) {
+                    await stateManager.setState(threadId, {
+                        ...currentState,
+                        status: "failed",
+                        error: error instanceof Error ? error.message : "Unknown error",
+                        updatedAt: new Date()
+                    });
+                }
             });
 
         return res.status(202).json({

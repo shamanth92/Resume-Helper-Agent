@@ -39,7 +39,7 @@ app.get("/health", (_req, res) => {
 });
 
 // Routes
-app.use("/api/resume", createResumeRoutes(stateManager.getStates()));
+app.use("/api/resume", createResumeRoutes(stateManager));
 
 // Error handling middleware (must be last)
 app.use(errorHandler);
