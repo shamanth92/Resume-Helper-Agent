@@ -143,7 +143,7 @@ Deployed on **Render** with:
 - Redis (25MB free tier)
 - Auto-deploy from GitHub
 
-**Live API:** `https://your-app.onrender.com`
+**Live API:** `https://resume-helper-agent.onrender.com`
 
 See [agent.md](./agent.md) for detailed deployment instructions.
 
@@ -182,13 +182,13 @@ User → POST /startAgent → Agent (LangGraph)
 **State Management:** Redis (persistent, scalable)  
 **Document Storage:** AWS S3  
 **Agent Framework:** LangGraph  
-**LLM:** OpenAI GPT-4o-mini
+**LLM:** OpenAI GPT-5-mini
 
 ## 📦 Tech Stack
 
 - **Backend:** Node.js, Express, TypeScript
 - **Agent:** LangGraph, LangChain
-- **AI:** OpenAI (GPT-4o-mini, text-embedding-3-small)
+- **AI:** OpenAI (GPT-5-mini, text-embedding-3-small)
 - **State:** Redis (ioredis)
 - **Storage:** AWS S3
 - **Document:** docx

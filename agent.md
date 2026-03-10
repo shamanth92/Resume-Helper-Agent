@@ -248,22 +248,6 @@ GET /api/resume/getAgentStatus?threadId=resume-helper-1234567890
 - S3 storage required (not local file system)
 - Render free tier has cold starts (~30 seconds)
 
-## Future Enhancements
-
-### Phase 2 (Planned)
-- [ ] Cover letter generation
-- [ ] PDF file upload support
-- [ ] Multiple resume versions
-- [ ] ATS score checker
-- [ ] LinkedIn profile optimizer
-
-### Phase 3 (Ideas)
-- [ ] Interview prep questions
-- [ ] Salary insights
-- [ ] Company research summary
-- [ ] Application tracking
-- [ ] Email integration
-
 ## Testing
 
 ### Manual Testing
@@ -343,7 +327,7 @@ Shamanth Kumar (alekh.shamanth@gmail.com)
 
 ## Changelog
 
-### v2.0.0 (2025-03-10)
+### v2.0.0 (2026-03-10)
 - ✅ REST API with Express
 - ✅ Redis state management (production-ready)
 - ✅ S3 document storage with signed URLs
@@ -351,7 +335,7 @@ Shamanth Kumar (alekh.shamanth@gmail.com)
 - ✅ Async state updates for real-time polling
 - ✅ Background job execution
 
-### v1.0.0 (2025-03-02)
+### v1.0.0 (2026-03-02)
 - Initial CLI release
 - Basic resume tailoring functionality
 - JSearch integration
